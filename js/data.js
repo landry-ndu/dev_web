@@ -190,3 +190,25 @@ function saveDynamicData() {
 }
 
 loadDynamicData();
+
+/* ============================================================
+   Likes – fonctions partagées (utilisées par main.js et actualites.js)
+   ============================================================ */
+function getLikedArticles() {
+  return JSON.parse(localStorage.getItem('gb_liked') || '[]');
+}
+
+function isLiked(id) {
+  return getLikedArticles().includes(id);
+}
+
+function toggleLike(id) {
+  const liked   = getLikedArticles();
+  const article = ARTICLES.find(a => a.id === id);
+  if (!article) return;
+  const idx = liked.indexOf(id);
+  if (idx === -1) { liked.push(id); article.likes++; }
+  else            { liked.splice(idx, 1); article.likes = Math.max(0, article.likes - 1); }
+  localStorage.setItem('gb_liked', JSON.stringify(liked));
+  saveDynamicData();
+}

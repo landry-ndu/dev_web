@@ -33,11 +33,11 @@ async function loadGames(reset = false) {
   try {
     let data;
     if (currentQuery) {
-      data = await API.searchGames(currentQuery, { page: currentPage, pageSize: 20 });
+      data = await API.searchGames(currentQuery, { page: currentPage, pageSize: 20, ordering: currentSort });
     } else if (currentGenre) {
-      data = await API.getGamesByGenre(currentGenre, { page: currentPage, pageSize: 20 });
+      data = await API.getGamesByGenre(currentGenre, { page: currentPage, pageSize: 20, ordering: currentSort });
     } else {
-      data = await API.getPopularGames({ page: currentPage, pageSize: 20 });
+      data = await API.getPopularGames({ page: currentPage, pageSize: 20, ordering: currentSort });
     }
 
     totalPages = Math.ceil((data.count || 1) / 20);
@@ -115,6 +115,11 @@ function bindFilters() {
     currentGenre = genre.value;
     currentQuery = '';
     if (search) search.value = '';
+    loadGames(true);
+  });
+
+  document.getElementById('sortGames')?.addEventListener('change', e => {
+    currentSort = e.target.value;
     loadGames(true);
   });
 }

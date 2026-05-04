@@ -208,6 +208,78 @@ function bindFollowFilter() {
 }
 
 /* ---- Modal article communautaire ---- */
+function openArticleModal(article) {
+  if (!article) return;
+  const overlay = document.getElementById('articleModal');
+  const content = document.getElementById('articleModalContent');
+  if (!overlay || !content) return;
+
+  const liked = isLiked(article.id);
+  content.innerHTML = `
+    <div class="article-modal-header">
+      <span class="news-card-category">${article.category}</span>
+      <h2 class="article-modal-title">${article.title}</h2>
+      <div class="article-modal-meta">
+        <span>${article.author}</span><span>·</span><span>${article.date}</span>
+        <button class="action-btn like-btn ${liked?'liked':''}" id="modalLikeBtn" data-id="${article.id}">
+          ${liked?'♥':'♡'} ${article.likes} likes
+        </button>
+      </div>
+    </div>
+    <div class="article-modal-body">${article.content.replace(/\n/g,'<br/><br/>')}</div>
+    <div class="article-modal-comments">
+      <div class="modal-section-title">Commentaires (${article.comments.length})</div>
+      <div id="commentsList">
+        ${article.comments.length === 0
+          ? '<p style="color:var(--text-muted);font-size:0.85rem;">Pas encore de commentaires.</p>'
+          : article.comments.map(c=>`
+            <div class="comment-item">
+              <div class="comment-author">${c.author}</div>
+              <p class="comment-text">${c.text}</p>
+            </div>`).join('')}
+      </div>
+      ${Auth.isLoggedIn() ? `
+        <div class="review-form" style="margin-top:1rem;">
+          <input type="text" id="commentInput" placeholder="Ajouter un commentaire..." />
+          <button class="btn-primary" id="submitComment">Commenter</button>
+        </div>` : `
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-top:0.75rem;">
+          <a href="auth.html" style="color:var(--accent)">Connecte-toi</a> pour commenter.</p>`}
+      ${Auth.isJournalist() && article.userCreated ? `
+        <div class="journalist-edit-bar">
+          <button class="btn-secondary" id="deleteArticleBtn">Supprimer</button>
+        </div>` : ''}
+    </div>`;
+
+  overlay.classList.remove('hidden');
+
+  content.querySelector('#modalLikeBtn')?.addEventListener('click', () => {
+    toggleLike(article.id);
+    const now = isLiked(article.id);
+    const btn = content.querySelector('#modalLikeBtn');
+    btn.classList.toggle('liked', now);
+    btn.innerHTML = `${now?'♥':'♡'} ${article.likes} likes`;
+  });
+
+  content.querySelector('#submitComment')?.addEventListener('click', () => {
+    const input = content.querySelector('#commentInput');
+    const text = input.value.trim();
+    if (!text) return;
+    const user = Auth.getCurrentUser();
+    article.comments.push({ author: user.username, text });
+    saveDynamicData();
+    openArticleModal(article);
+  });
+
+  content.querySelector('#deleteArticleBtn')?.addEventListener('click', () => {
+    const idx = ARTICLES.findIndex(a => a.id === article.id);
+    if (idx !== -1) ARTICLES.splice(idx, 1);
+    saveDynamicData();
+    overlay.classList.add('hidden');
+    renderCommunityArticles();
+  });
+}
+
 function bindArticleModal() {
   const overlay = document.getElementById('articleModal');
   const closeBtn = document.getElementById('articleModalClose');

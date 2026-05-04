@@ -21,9 +21,9 @@ const API = (() => {
   }
 
   /* Liste de jeux populaires */
-  async function getPopularGames({ page = 1, pageSize = 20 } = {}) {
+  async function getPopularGames({ page = 1, pageSize = 20, ordering = '-rating' } = {}) {
     return rawgFetch('/games', {
-      ordering: '-rating',
+      ordering,
       page,
       page_size: pageSize,
       metacritic: '60,100'
@@ -31,15 +31,15 @@ const API = (() => {
   }
 
   /* Recherche */
-  async function searchGames(query, { page = 1, pageSize = 20 } = {}) {
-    return rawgFetch('/games', { search: query, page, page_size: pageSize });
+  async function searchGames(query, { page = 1, pageSize = 20, ordering = '-rating' } = {}) {
+    return rawgFetch('/games', { search: query, ordering, page, page_size: pageSize });
   }
 
   /* Filtrer par genre */
-  async function getGamesByGenre(genre, { page = 1, pageSize = 20 } = {}) {
+  async function getGamesByGenre(genre, { page = 1, pageSize = 20, ordering = '-rating' } = {}) {
     return rawgFetch('/games', {
       genres: genre.toLowerCase(),
-      ordering: '-rating',
+      ordering,
       page,
       page_size: pageSize
     });

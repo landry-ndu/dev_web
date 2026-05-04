@@ -45,21 +45,28 @@
         <label>Genre</label>
         <select id="filterGenre" class="filter-select">
           <option value="">Tous</option>
-          <option value="RPG">RPG</option>
-          <option value="Action">Action</option>
-          <option value="FPS">FPS</option>
-          <option value="Aventure">Aventure</option>
-          <option value="Stratégie">Stratégie</option>
-          <option value="Sport">Sport</option>
-          <option value="Horreur">Horreur</option>
+          <option value="action">Action</option>
+          <option value="role-playing-games-rpg">RPG</option>
+          <option value="shooter">FPS / Shooter</option>
+          <option value="adventure">Aventure</option>
+          <option value="strategy">Stratégie</option>
+          <option value="sports">Sport</option>
+          <option value="puzzle">Puzzle</option>
+          <option value="indie">Indépendant</option>
+          <option value="simulation">Simulation</option>
+          <option value="racing">Course</option>
+          <option value="fighting">Combat</option>
+          <option value="horror">Horreur</option>
         </select>
       </div>
       <div class="filter-group">
         <label>Trier par</label>
         <select id="sortGames" class="filter-select">
-          <option value="note">Meilleure note</option>
-          <option value="titre">Titre A-Z</option>
-          <option value="annee">Année</option>
+          <option value="-rating">Meilleure note</option>
+          <option value="-metacritic">Metacritic</option>
+          <option value="-released">Plus récents</option>
+          <option value="name">Titre A-Z</option>
+          <option value="-added">Popularité</option>
         </select>
       </div>
     </div>
@@ -68,16 +75,6 @@
       <!-- Généré par JS -->
     </div>
   </main>
-
-  <!-- Modal fiche jeu -->
-  <div class="modal-overlay hidden" id="gameModal">
-    <div class="modal-card">
-      <button class="modal-close" id="modalClose">✕</button>
-      <div class="modal-content" id="modalContent">
-        <!-- Généré par JS -->
-      </div>
-    </div>
-  </div>
 
   <footer class="footer">
     <p>© 2025 GameBizarre — Tous droits réservés.</p>
