@@ -68,6 +68,11 @@
       </form>
     </div>
 
+    <!-- Filtre jeux suivis -->
+    <div style="margin-bottom:1rem;">
+      <button class="btn-secondary" id="btnFollowedFilter">🔔 Mes jeux suivis (0)</button>
+    </div>
+
     <!-- Filtres -->
     <div class="filters-bar">
       <div class="search-wrapper">
@@ -75,16 +80,19 @@
         <span class="search-icon">⌕</span>
       </div>
       <div class="filter-group">
-        <label>Catégorie</label>
-        <select id="filterCategory" class="filter-select">
+        <label>Source</label>
+        <select id="filterSource" class="filter-select">
           <option value="">Toutes</option>
-          <option value="Annonce">Annonce</option>
-          <option value="Test">Test</option>
-          <option value="Preview">Preview</option>
-          <option value="News">News</option>
+          <option value="IGN">IGN</option>
+          <option value="Gamekult">Gamekult</option>
+          <option value="Jeuxvideo">Jeuxvideo.com</option>
+          <option value="Kotaku">Kotaku</option>
         </select>
       </div>
     </div>
+
+    <!-- Articles communautaires (journalistes) -->
+    <div id="communityArticles"></div>
 
     <div class="news-list" id="newsList">
       <!-- Généré par JS -->
@@ -105,7 +113,9 @@
     <p>© 2025 GameBizarre — Tous droits réservés.</p>
   </footer>
 
+  <script src="js/config.js"></script>
   <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/actualites.js"></script>
 </body>
