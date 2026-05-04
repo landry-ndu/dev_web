@@ -6,7 +6,7 @@
 
 const CONFIG = {
   /* Remplace par ta clé RAWG (gratuite) */
-  RAWG_KEY: 'YOUR_RAWG_API_KEY',
+  RAWG_KEY: '0d9b305b5a4c46108f5b6991a4027a0b',
   RAWG_BASE: 'https://api.rawg.io/api',
 
   /* Flux RSS convertis en JSON via rss2json (gratuit, CORS ok) */
