@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GameBizarre – Fiche Jeu</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/game-page.css" />
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-brand">
+      <span class="brand-star">★</span>
+      <a href="index.html" class="brand-name">GameBizarre</a>
+    </div>
+    <nav class="navbar-links">
+      <a href="index.html" class="nav-link">Accueil</a>
+      <a href="jeux.html" class="nav-link active">Jeux</a>
+      <a href="actualites.html" class="nav-link">Actualités</a>
+    </nav>
+    <div class="navbar-actions">
+      <button class="btn-darkmode" id="darkModeToggle" title="Dark mode">☽</button>
+      <a href="auth.html" class="btn-login" id="authBtn">Connexion</a>
+      <div class="user-menu hidden" id="userMenu">
+        <span class="username-display" id="usernameDisplay"></span>
+        <button class="btn-logout" id="logoutBtn">Déconnexion</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Skeleton loader -->
+  <div id="gameSkeleton" class="game-skeleton">
+    <div class="skeleton-hero"></div>
+    <div class="skeleton-content">
+      <div class="skeleton-block w60"></div>
+      <div class="skeleton-block w40"></div>
+      <div class="skeleton-block w80"></div>
+      <div class="skeleton-block w70"></div>
+    </div>
+  </div>
+
+  <!-- Contenu principal -->
+  <main id="gameMain" class="hidden">
+
+    <!-- Hero jeu -->
+    <section class="game-hero" id="gameHero">
+      <div class="game-hero-bg" id="gameHeroBg"></div>
+      <div class="game-hero-overlay"></div>
+      <div class="game-hero-content">
+        <img class="game-hero-cover" id="gameCover" src="" alt="" />
+        <div class="game-hero-info">
+          <div class="game-breadcrumb">
+            <a href="jeux.html">← Retour aux jeux</a>
+          </div>
+          <h1 class="game-hero-title" id="gameTitle"></h1>
+          <div class="game-hero-meta" id="gameMeta"></div>
+          <div class="game-hero-rating" id="gameRating"></div>
+
+          <!-- Boutons Letterbox -->
+          <div class="letterbox-actions" id="letterboxActions">
+            <button class="lb-btn" id="btnPlayed"   data-status="played">✓ Joué</button>
+            <button class="lb-btn" id="btnPlaying"  data-status="playing">▶ En cours</button>
+            <button class="lb-btn" id="btnWant"     data-status="want">♡ Envie</button>
+            <button class="lb-btn btn-follow" id="btnFollow">🔔 Suivre</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="game-body">
+
+      <!-- Colonne principale -->
+      <div class="game-main-col">
+
+        <!-- Description -->
+        <section class="game-section">
+          <h2 class="game-section-title">À propos</h2>
+          <div class="game-description" id="gameDescription"></div>
+        </section>
+
+        <!-- Screenshots -->
+        <section class="game-section" id="screenshotsSection">
+          <h2 class="game-section-title">Screenshots</h2>
+          <div class="screenshots-grid" id="screenshotsGrid"></div>
+        </section>
+
+        <!-- Avis utilisateurs -->
+        <section class="game-section">
+          <h2 class="game-section-title">Avis des joueurs</h2>
+          <div class="reviews-list" id="gameReviewsList"></div>
+
+          <div id="reviewFormSection">
+            <!-- Affiché si connecté -->
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="game-sidebar">
+
+        <!-- Ma note -->
+        <div class="sidebar-card" id="myRatingCard">
+          <h3 class="sidebar-card-title">Ma note</h3>
+          <div class="star-rating" id="myStarRating">
+            <span class="star" data-val="1">★</span>
+            <span class="star" data-val="2">★</span>
+            <span class="star" data-val="3">★</span>
+            <span class="star" data-val="4">★</span>
+            <span class="star" data-val="5">★</span>
+          </div>
+          <p class="my-rating-label" id="myRatingLabel">Non noté</p>
+        </div>
+
+        <!-- Infos -->
+        <div class="sidebar-card">
+          <h3 class="sidebar-card-title">Infos</h3>
+          <dl class="game-info-list" id="gameInfoList"></dl>
+        </div>
+
+        <!-- Genres -->
+        <div class="sidebar-card">
+          <h3 class="sidebar-card-title">Genres</h3>
+          <div class="tag-list" id="gameGenres"></div>
+        </div>
+
+        <!-- Plateformes -->
+        <div class="sidebar-card">
+          <h3 class="sidebar-card-title">Plateformes</h3>
+          <div class="tag-list" id="gamePlatforms"></div>
+        </div>
+
+        <!-- Jeux similaires -->
+        <div class="sidebar-card" id="similarCard">
+          <h3 class="sidebar-card-title">Saga / Similaires</h3>
+          <div id="similarGames"></div>
+        </div>
+
+      </aside>
+    </div>
+  </main>
+
+  <!-- Lightbox screenshots -->
+  <div class="lightbox hidden" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">✕</button>
+    <button class="lightbox-prev" id="lightboxPrev">‹</button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="" />
+    <button class="lightbox-next" id="lightboxNext">›</button>
+  </div>
+
+  <footer class="footer">
+    <p>© 2025 GameBizarre — Tous droits réservés.</p>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/game-page.js"></script>
+</body>
+</html>
