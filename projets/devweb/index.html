@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GameBizarre – Actu & Critiques Jeux Vidéo</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="navbar-brand">
+      <span class="brand-star">★</span>
+      <a href="index.html" class="brand-name">GameBizarre</a>
+    </div>
+    <nav class="navbar-links">
+      <a href="index.html" class="nav-link active">Accueil</a>
+      <a href="jeux.html" class="nav-link">Jeux</a>
+      <a href="actualites.html" class="nav-link">Actualités</a>
+    </nav>
+    <div class="navbar-actions">
+      <button class="btn-darkmode" id="darkModeToggle" title="Dark mode">☽</button>
+      <a href="auth.html" class="btn-login" id="authBtn">Connexion</a>
+      <div class="user-menu hidden" id="userMenu">
+        <span class="username-display" id="usernameDisplay"></span>
+        <button class="btn-logout" id="logoutBtn">Déconnexion</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="accent">Critiques.</span> Actus.<br />
+        L'univers du jeu vidéo réinventé.
+      </h1>
+      <p class="hero-subtitle">Notez, commentez, partagez. Suivez les dernières nouvelles gaming.</p>
+      <a href="jeux.html" class="btn-primary">Explorer les jeux</a>
+      <a href="actualites.html" class="btn-secondary">Dernières actus</a>
+    </div>
+    <div class="hero-deco">
+      <div class="deco-ring ring1"></div>
+      <div class="deco-ring ring2"></div>
+      <div class="deco-star s1">✦</div>
+      <div class="deco-star s2">✧</div>
+      <div class="deco-star s3">✦</div>
+    </div>
+  </section>
+
+  <!-- JEUX POPULAIRES -->
+  <section class="section-block" id="popularGames">
+    <div class="section-header">
+      <h2 class="section-title"><span class="accent">★</span> Jeux Populaires</h2>
+      <a href="jeux.html" class="see-all">Voir tout →</a>
+    </div>
+    <div class="cards-grid" id="popularGamesGrid">
+      <!-- Généré par JS -->
+    </div>
+  </section>
+
+  <!-- ACTUALITÉS RÉCENTES -->
+  <section class="section-block" id="recentNews">
+    <div class="section-header">
+      <h2 class="section-title"><span class="accent">✦</span> Actualités Récentes</h2>
+      <a href="actualites.html" class="see-all">Voir tout →</a>
+    </div>
+    <div class="news-grid" id="recentNewsGrid">
+      <!-- Généré par JS -->
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2025 GameBizarre — Tous droits réservés.</p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

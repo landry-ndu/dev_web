@@ -1,0 +1,54 @@
+/* ============================================================
+   GameBizarre – animations.css
+   ============================================================ */
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes pulse-ring {
+  0%, 100% { transform: scale(1);   opacity: 0.18; }
+  50%       { transform: scale(1.06); opacity: 0.30; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(0.94) translateY(10px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Apply fade-in to cards on load */
+.game-card, .news-card, .news-list-item {
+  animation: fade-in 0.35s ease both;
+}
+
+/* Stagger children inside grids */
+.cards-grid .game-card:nth-child(1)  { animation-delay: 0.04s; }
+.cards-grid .game-card:nth-child(2)  { animation-delay: 0.08s; }
+.cards-grid .game-card:nth-child(3)  { animation-delay: 0.12s; }
+.cards-grid .game-card:nth-child(4)  { animation-delay: 0.16s; }
+.cards-grid .game-card:nth-child(5)  { animation-delay: 0.20s; }
+.cards-grid .game-card:nth-child(6)  { animation-delay: 0.24s; }
+.cards-grid .game-card:nth-child(7)  { animation-delay: 0.28s; }
+.cards-grid .game-card:nth-child(8)  { animation-delay: 0.32s; }
+
+.news-grid .news-card:nth-child(1)  { animation-delay: 0.04s; }
+.news-grid .news-card:nth-child(2)  { animation-delay: 0.10s; }
+.news-grid .news-card:nth-child(3)  { animation-delay: 0.16s; }
+
+.navbar { animation: slide-down 0.3s ease; }
