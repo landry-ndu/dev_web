@@ -86,6 +86,19 @@ function updateNavAuth() {
       window.location.href = 'index.html';
     });
   }
+
+  /* Badge messages non lus (si Social est chargé) */
+  if (user && typeof Social !== 'undefined') {
+    const navMsg = document.getElementById('navMessages');
+    if (navMsg) {
+      const updateBadge = () => {
+        const n = Social.getUnreadCount(user.username);
+        navMsg.innerHTML = `Messages${n ? ` <span class="badge">${n}</span>` : ''}`;
+      };
+      updateBadge();
+      setInterval(updateBadge, 3000);
+    }
+  }
 }
 
 /* Dark mode */

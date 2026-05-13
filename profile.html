@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GameBizarre – Profil</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/social.css" />
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-brand">
+      <span class="brand-star">★</span>
+      <a href="index.html" class="brand-name">GameBizarre</a>
+    </div>
+    <nav class="navbar-links">
+      <a href="index.html" class="nav-link">Accueil</a>
+      <a href="jeux.html" class="nav-link">Jeux</a>
+      <a href="actualites.html" class="nav-link">Actualités</a>
+      <a href="messages.html" class="nav-link" id="navMessages">Messages</a>
+    </nav>
+    <div class="navbar-actions">
+      <button class="btn-darkmode" id="darkModeToggle" title="Dark mode">☽</button>
+      <a href="auth.html" class="btn-login" id="authBtn">Connexion</a>
+      <div class="user-menu hidden" id="userMenu">
+        <a href="profile.html" class="username-display" id="usernameDisplay"></a>
+        <button class="btn-logout" id="logoutBtn">Déconnexion</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-main" id="profileMain">
+
+    <!-- Bannière -->
+    <section class="profile-banner">
+      <div class="profile-avatar-wrap">
+        <img class="profile-avatar" id="profileAvatar" src="" alt="avatar" />
+        <button class="avatar-edit-btn hidden" id="avatarEditBtn" title="Changer photo">✎</button>
+      </div>
+      <div class="profile-info">
+        <h1 class="profile-username" id="profileUsername"></h1>
+        <p class="profile-bio" id="profileBio"></p>
+        <p class="profile-meta" id="profileMeta"></p>
+        <div class="profile-actions" id="profileActions"></div>
+      </div>
+    </section>
+
+    <!-- Édition profil (visible si c'est le sien) -->
+    <section class="edit-profile hidden" id="editProfile">
+      <h3 class="section-title-mini">Paramètres du profil</h3>
+      <div class="form-group">
+        <label>Photo de profil (URL)</label>
+        <input type="url" id="inputPhoto" placeholder="https://..." />
+      </div>
+      <div class="form-group">
+        <label>Bio</label>
+        <textarea id="inputBio" rows="3" placeholder="Quelques mots sur toi..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Confidentialité de ma liste</label>
+        <select id="inputVisibility">
+          <option value="public">🌐 Publique (tout le monde peut voir)</option>
+          <option value="private">🔒 Privée (seuls mes amis voient)</option>
+        </select>
+      </div>
+      <button class="btn-primary" id="saveProfileBtn">Enregistrer</button>
+      <p class="form-success hidden" id="saveSuccess">✓ Profil mis à jour</p>
+    </section>
+
+    <!-- Tabs -->
+    <nav class="profile-tabs" id="profileTabs">
+      <button class="tab-btn active" data-tab="stats">📊 Stats</button>
+      <button class="tab-btn" data-tab="games">🎮 Jeux</button>
+      <button class="tab-btn" data-tab="reviews">📝 Avis</button>
+      <button class="tab-btn" data-tab="friends">👥 Amis</button>
+    </nav>
+
+    <!-- Tab : stats -->
+    <section class="tab-content" id="tab-stats">
+      <div class="stats-grid" id="statsGrid"></div>
+    </section>
+
+    <!-- Tab : jeux -->
+    <section class="tab-content hidden" id="tab-games">
+      <div id="gamesListBlock"></div>
+    </section>
+
+    <!-- Tab : avis -->
+    <section class="tab-content hidden" id="tab-reviews">
+      <div id="reviewsListBlock"></div>
+    </section>
+
+    <!-- Tab : amis -->
+    <section class="tab-content hidden" id="tab-friends">
+
+      <div class="friends-search" id="friendsSearchBlock">
+        <h3 class="section-title-mini">Ajouter un ami</h3>
+        <div class="search-wrapper">
+          <input type="text" id="friendSearch" placeholder="Pseudo..." class="search-input" />
+          <span class="search-icon">⌕</span>
+        </div>
+        <div id="friendSearchResults"></div>
+      </div>
+
+      <div id="incomingRequestsBlock"></div>
+      <div id="friendsListBlock"></div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 GameBizarre — Tous droits réservés.</p>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/social.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>
