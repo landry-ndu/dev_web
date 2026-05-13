@@ -6,6 +6,7 @@ let currentPage  = 1;
 let totalPages   = 1;
 let currentQuery = '';
 let currentGenre = '';
+let currentSort  = '-rating';
 let isLoading    = false;
 
 document.addEventListener('DOMContentLoaded', () => {
