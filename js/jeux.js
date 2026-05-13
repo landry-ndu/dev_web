@@ -1,53 +1,47 @@
 /* ============================================================
-   jeux.js – Catalogue de jeux via RAWG API
+   jeux.js – Catalogue de jeux via RAWG API (simplifié)
    ============================================================ */
 
 let currentPage  = 1;
-let totalPages   = 1;
 let currentQuery = '';
-let currentGenre = '';
-let currentSort  = '-rating';
 let isLoading    = false;
+let hasMore      = true;
 
 document.addEventListener('DOMContentLoaded', () => {
-  const params = new URLSearchParams(location.search);
-  const genre  = params.get('genre');
-  if (genre) {
-    const sel = document.getElementById('filterGenre');
-    if (sel) { sel.value = genre; currentGenre = genre; }
-  }
-
   loadGames(true);
-  bindFilters();
+  bindSearch();
+  bindLoadMore();
 });
 
-/* ---- Chargement ---- */
+/* ---- Chargement ----
+   reset = true  → vide la grille, recommence à la page 1
+   reset = false → ajoute la page suivante à la fin */
 async function loadGames(reset = false) {
   if (isLoading) return;
   isLoading = true;
 
   if (reset) {
     currentPage = 1;
+    hasMore = true;
     document.getElementById('gamesGrid').innerHTML = renderSkeletonCards(8);
+  } else {
+    currentPage++;
+    showLoadMoreSpinner();
   }
 
   try {
-    let data;
-    if (currentQuery) {
-      data = await API.searchGames(currentQuery, { page: currentPage, pageSize: 20, ordering: currentSort });
-    } else if (currentGenre) {
-      data = await API.getGamesByGenre(currentGenre, { page: currentPage, pageSize: 20, ordering: currentSort });
-    } else {
-      data = await API.getPopularGames({ page: currentPage, pageSize: 20, ordering: currentSort });
-    }
-
-    totalPages = Math.ceil((data.count || 1) / 20);
+    const data = currentQuery
+      ? await API.searchGames(currentQuery, { page: currentPage, pageSize: 20 })
+      : await API.getPopularGames({ page: currentPage, pageSize: 20 });
 
     const grid = document.getElementById('gamesGrid');
     if (reset) grid.innerHTML = '';
 
     if (!data.results?.length) {
-      grid.innerHTML = '<p style="color:var(--text-muted);padding:2rem;grid-column:1/-1;">Aucun jeu trouvé.</p>';
+      hasMore = false;
+      if (reset) {
+        grid.innerHTML = '<p style="color:var(--text-muted);padding:2rem;grid-column:1/-1;">Aucun jeu trouvé.</p>';
+      }
     } else {
       data.results.forEach(game => {
         const wrap = document.createElement('div');
@@ -58,11 +52,18 @@ async function loadGames(reset = false) {
         });
         grid.appendChild(el);
       });
+      hasMore = !!data.next;
     }
 
-    updatePagination();
+    updateLoadMoreBtn();
   } catch (err) {
-    document.getElementById('gamesGrid').innerHTML = renderApiError(err);
+    console.error('RAWG error:', err);
+    if (reset) {
+      document.getElementById('gamesGrid').innerHTML = renderApiError(err);
+    } else {
+      currentPage--; /* on revert si erreur */
+      updateLoadMoreBtn();
+    }
   } finally {
     isLoading = false;
   }
@@ -74,7 +75,7 @@ function createGameCard(game) {
   const mc     = game.metacritic
     ? `<span style="color:#4ade80;font-size:0.72rem;font-weight:700;margin-left:4px;">MC ${game.metacritic}</span>`
     : '';
-  const status = Letterbox.getStatus(game.id);
+  const status = (typeof Letterbox !== 'undefined') ? Letterbox.getStatus(game.id) : null;
   const badge  = status
     ? `<span class="card-status-badge status-${status}">${status==='played'?'✓':status==='playing'?'▶':'♡'}</span>`
     : '';
@@ -96,68 +97,49 @@ function createGameCard(game) {
     </div>`;
 }
 
-/* ---- Filtres ---- */
-function bindFilters() {
+/* ---- Recherche (avec debounce) ---- */
+function bindSearch() {
   const search = document.getElementById('searchGames');
-  const genre  = document.getElementById('filterGenre');
-
-  let searchTimer;
+  let timer;
   search?.addEventListener('input', () => {
-    clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
       currentQuery = search.value.trim();
-      currentGenre = '';
-      if (genre) genre.value = '';
       loadGames(true);
     }, 450);
   });
-
-  genre?.addEventListener('change', () => {
-    currentGenre = genre.value;
-    currentQuery = '';
-    if (search) search.value = '';
-    loadGames(true);
-  });
-
-  document.getElementById('sortGames')?.addEventListener('change', e => {
-    currentSort = e.target.value;
-    loadGames(true);
-  });
 }
 
-/* ---- Pagination ---- */
-function updatePagination() {
-  let pg = document.getElementById('pagination');
-  if (!pg) {
-    pg = document.createElement('div');
-    pg.id = 'pagination';
-    pg.style.cssText = 'display:flex;justify-content:center;align-items:center;gap:0.75rem;margin:2rem 0;';
-    document.querySelector('.page-main')?.appendChild(pg);
+/* ---- Bouton "Charger plus" ---- */
+function bindLoadMore() {
+  let btn = document.getElementById('loadMoreBtn');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'loadMoreBtn';
+    btn.className = 'btn-secondary';
+    btn.style.cssText = 'display:block;margin:2rem auto;min-width:200px;';
+    btn.textContent = 'Charger plus';
+    document.querySelector('.page-main')?.appendChild(btn);
   }
-
-  pg.innerHTML = '';
-  if (totalPages <= 1) return;
-
-  const prev = document.createElement('button');
-  prev.textContent = '← Précédent';
-  prev.className = 'btn-secondary';
-  prev.disabled = currentPage === 1;
-  prev.addEventListener('click', () => { currentPage--; loadGames(true); window.scrollTo(0, 0); });
-
-  const info = document.createElement('span');
-  info.style.cssText = 'color:var(--text-muted);font-size:0.85rem;';
-  info.textContent = `Page ${currentPage} / ${totalPages}`;
-
-  const next = document.createElement('button');
-  next.textContent = 'Suivant →';
-  next.className = 'btn-secondary';
-  next.disabled = currentPage >= totalPages;
-  next.addEventListener('click', () => { currentPage++; loadGames(true); window.scrollTo(0, 0); });
-
-  pg.append(prev, info, next);
+  btn.addEventListener('click', () => loadGames(false));
 }
 
-/* ---- Skeleton ---- */
+function updateLoadMoreBtn() {
+  const btn = document.getElementById('loadMoreBtn');
+  if (!btn) return;
+  btn.textContent = 'Charger plus';
+  btn.disabled = false;
+  btn.style.display = hasMore ? 'block' : 'none';
+}
+
+function showLoadMoreSpinner() {
+  const btn = document.getElementById('loadMoreBtn');
+  if (!btn) return;
+  btn.textContent = 'Chargement…';
+  btn.disabled = true;
+}
+
+/* ---- Skeleton & erreur ---- */
 function renderSkeletonCards(n) {
   return Array.from({ length: n }, () => `
     <div class="game-card" style="pointer-events:none;">
@@ -171,7 +153,9 @@ function renderSkeletonCards(n) {
 }
 
 function renderApiError(err) {
-  const needsKey = CONFIG.RAWG_KEY === 'YOUR_RAWG_API_KEY';
+  const needsKey = (typeof CONFIG === 'undefined') ||
+                   CONFIG.RAWG_KEY === 'YOUR_RAWG_API_KEY' ||
+                   !CONFIG.RAWG_KEY;
   return `<div style="padding:2rem;color:var(--text-muted);grid-column:1/-1;">
     <p style="font-weight:700;color:var(--accent);margin-bottom:0.5rem;">
       ${needsKey ? '⚠️ Clé RAWG manquante' : '⚠️ Impossible de charger les jeux'}
@@ -180,7 +164,7 @@ function renderApiError(err) {
       ? `<p>Obtiens ta clé gratuite sur <a href="https://rawg.io/apidocs" target="_blank"
            style="color:var(--accent)">rawg.io/apidocs</a>, puis remplace <code>YOUR_RAWG_API_KEY</code>
            dans <code>js/config.js</code>.</p>`
-      : `<p>${err.message}</p>`}
+      : `<p>${err.message || err}</p>`}
   </div>`;
 }
 
