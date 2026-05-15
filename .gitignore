@@ -3,3 +3,4 @@ projets/devweb/includes/database.php
 
 # Config locale outil
 projets/devweb/.claude/
+projets/devweb/reset_mysql.bat
