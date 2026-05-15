@@ -24,13 +24,16 @@
       puis tu mets ici  $host = "127.0.0.1";  $port = 3306;
    ============================================================ */
 
-/* ---- CONFIG SERVEUR ÉCOLE (à modifier) ---- */
-$host   = "localhost";      // ← adresse serveur MySQL école
-$port   = 3306;             // ← port MySQL
-$dbname = "gamebizarre";    // ← nom de la base
-$user   = "root";           // ← ton login MySQL école
-$pass   = "";               // ← ton mot de passe MySQL école
-/* ------------------------------------------- */
+/* ---- CONFIG SERVEUR ÉCOLE webetu (Saint-Étienne) ----
+   Le code tourne SUR webetu → MySQL est en local ("localhost").
+   Si "localhost" ne marche pas, demande au prof l'hôte exact
+   (parfois "dbetu.univ-st-etienne.fr" ou un nom interne). */
+$host   = "localhost";          // hôte MySQL vu depuis webetu
+$port   = 3306;                 // port MySQL standard
+$dbname = "TON_LOGIN";           // ta base = ton login
+$user   = "TON_LOGIN";           // ton login MySQL université
+$pass   = 'TON_MOT_DE_PASSE';     // ton mot de passe MySQL (quotes simples)
+/* ----------------------------------------------------- */
 
 
 try {
