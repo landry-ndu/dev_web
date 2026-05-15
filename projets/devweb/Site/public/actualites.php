@@ -1,0 +1,96 @@
+<?php $active = 'actu'; ?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GameBizarre – Actualités</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <link rel="stylesheet" href="/assets/css/animations.css" />
+  <link rel="stylesheet" href="/assets/css/social.css" />
+</head>
+<body>
+
+  <?php include __DIR__ . "/../includes/navbar.php"; ?>
+
+  <main class="page-main">
+    <div class="page-header">
+      <h1 class="page-title"><span class="accent">✦</span> Actualités Gaming</h1>
+      <p class="page-subtitle">Les dernières nouvelles du monde du jeu vidéo</p>
+    </div>
+
+    <div id="journalistActions" class="journalist-bar hidden">
+      <button class="btn-primary" id="newArticleBtn">+ Nouvel article</button>
+    </div>
+
+    <div class="article-form-wrapper hidden" id="articleFormWrapper">
+      <form class="article-form" id="articleForm">
+        <h3>Rédiger un article</h3>
+        <div class="form-group">
+          <label>Titre</label>
+          <input type="text" id="articleTitle" placeholder="Titre de l'article" required />
+        </div>
+        <div class="form-group">
+          <label>Catégorie</label>
+          <select id="articleCategory">
+            <option value="Annonce">Annonce</option>
+            <option value="Test">Test</option>
+            <option value="Preview">Preview</option>
+            <option value="News">News</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Contenu</label>
+          <textarea id="articleContent" rows="6" placeholder="Écris ton article ici..." required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Publier</button>
+          <button type="button" class="btn-secondary" id="cancelArticle">Annuler</button>
+        </div>
+      </form>
+    </div>
+
+    <div style="margin-bottom:1rem;">
+      <button class="btn-secondary" id="btnFollowedFilter">🔔 Mes jeux suivis (0)</button>
+    </div>
+
+    <div class="filters-bar">
+      <div class="search-wrapper">
+        <input type="text" id="searchNews" placeholder="Rechercher un article..." class="search-input" />
+        <span class="search-icon">⌕</span>
+      </div>
+      <div class="filter-group">
+        <label>Source</label>
+        <select id="filterSource" class="filter-select">
+          <option value="">Toutes</option>
+          <option value="IGN">IGN</option>
+          <option value="Gamekult">Gamekult</option>
+          <option value="Jeuxvideo">Jeuxvideo.com</option>
+          <option value="Kotaku">Kotaku</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="communityArticles"></div>
+    <div class="news-list" id="newsList"></div>
+  </main>
+
+  <div class="modal-overlay hidden" id="articleModal">
+    <div class="modal-card modal-wide">
+      <button class="modal-close" id="articleModalClose">✕</button>
+      <div class="modal-content" id="articleModalContent"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>© 2025 GameBizarre — Tous droits réservés.</p>
+  </footer>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/social.js"></script>
+  <script src="/assets/js/auth.js"></script>
+  <script src="/assets/js/actualites.js"></script>
+</body>
+</html>
