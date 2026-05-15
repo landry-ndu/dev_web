@@ -1,4 +1,7 @@
-<?php $active = 'accueil'; ?>
+<?php
+require_once __DIR__ . "/../includes/auth.php";  // session AVANT tout HTML
+$active = 'accueil';
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>

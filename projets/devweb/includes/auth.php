@@ -4,8 +4,14 @@
    Rôles : 'user' < 'journalist' < 'admin'
    ============================================================ */
 
-if (session_status() === PHP_SESSION_NONE) {
+/* Filet de sécurité : si une page envoie du HTML avant d'inclure ce
+   fichier, le tampon de sortie évite l'erreur "headers already sent"
+   pour que session_start() fonctionne quand même. */
+if (!headers_sent() && session_status() === PHP_SESSION_NONE) {
+    @ob_start();
     session_start();
+} elseif (session_status() === PHP_SESSION_NONE) {
+    @session_start();
 }
 
 /* L'utilisateur est-il connecté ? */
