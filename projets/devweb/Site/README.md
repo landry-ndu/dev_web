@@ -46,11 +46,20 @@ $pass   = "";               // ← ton mot de passe MySQL école
 
 ### 4. Lancer le serveur web
 
+**Le plus simple (Windows)** : double-clic sur **`start.bat`**
+→ il détecte PHP, active les extensions MySQL et ouvre le navigateur.
+
+**Manuel (toutes plateformes)** :
 ```bash
 php -S localhost:8000 -t public
 ```
 
 Puis ouvre **http://localhost:8000** dans ton navigateur.
+
+> ⚠️ L'extension PHP **pdo_mysql** doit être activée. XAMPP/MAMP et le
+> serveur de l'école l'ont par défaut. Le `start.bat` la force
+> automatiquement (`-d extension=pdo_mysql`). En manuel sans php.ini
+> configuré : `php -d extension=pdo_mysql -S localhost:8000 -t public`.
 
 ### 5. Clé API RAWG (catalogue de jeux)
 Récupère une clé gratuite sur https://rawg.io/apidocs et mets-la dans
