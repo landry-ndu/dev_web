@@ -1,2 +1,5 @@
 # Identifiants BDD réels - NE JAMAIS committer (repo public)
-projets/devweb/Site/includes/database.php
+projets/devweb/includes/database.php
+
+# Config locale outil
+projets/devweb/.claude/

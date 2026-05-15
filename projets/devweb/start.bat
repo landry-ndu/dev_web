@@ -1,65 +1,68 @@
 @echo off
-title GameBizarre - Serveur local
+title GameBizarre - Serveur PHP
 color 0A
+cd /d "%~dp0"
 
 echo.
 echo  ==========================================
-echo    GameBizarre - Demarrage du serveur
+echo    GameBizarre - Serveur PHP + MySQL
 echo  ==========================================
 echo.
 
-REM Detection Python (essaye dans cet ordre : py, python, python3)
-set PY=
-where py >nul 2>nul && set PY=py
-if "%PY%"=="" where python >nul 2>nul && set PY=python
-if "%PY%"=="" where python3 >nul 2>nul && set PY=python3
+REM --- Detection de PHP ---
+set "PHP="
+set "PHPDIR="
+where php >nul 2>nul && (
+  for /f "delims=" %%P in ('where php') do if not defined PHP set "PHP=%%P"
+)
+if "%PHP%"=="" (
+  for /d %%D in ("%LOCALAPPDATA%\Microsoft\WinGet\Packages\PHP.PHP.8.*") do (
+    if exist "%%D\php.exe" set "PHP=%%D\php.exe"
+  )
+)
+if "%PHP%"=="" goto NO_PHP
 
-if "%PY%"=="" goto NO_PYTHON
+REM Dossier de PHP (pour trouver le sous-dossier ext\)
+for %%F in ("%PHP%") do set "PHPDIR=%%~dpF"
 
-echo  Python detecte : %PY%
-%PY% --version
+echo  PHP detecte : %PHP%
+"%PHP%" --version | findstr /i "PHP "
 echo.
-echo  Le site va s'ouvrir sur : http://localhost:8000
+echo  Site : http://localhost:8000
 echo.
-echo  IMPORTANT : Ne ferme pas cette fenetre tant que tu utilises le site.
-echo  Pour arreter le serveur : ferme cette fenetre.
+echo  RAPPELS :
+echo   - MySQL doit etre demarre
+echo   - Config serveur dans includes\database.php
+echo   - Ne ferme pas cette fenetre pendant l'utilisation
 echo.
 echo  ==========================================
 echo.
 
-REM Ouvre le navigateur dans 2 sec (en arriere-plan)
 start "" cmd /c "timeout /t 2 /nobreak >nul && start http://localhost:8000"
 
-REM Lance le serveur
-%PY% -m http.server 8000
+REM On force l'activation des extensions MySQL via -d (portable :
+REM marche meme si php.ini n'active pas pdo_mysql par defaut)
+"%PHP%" ^
+  -d extension_dir="%PHPDIR%ext" ^
+  -d extension=pdo_mysql ^
+  -d extension=mysqli ^
+  -d extension=mbstring ^
+  -d extension=openssl ^
+  -S localhost:8000 -t public
 
-REM Si le serveur s'arrete, garder la fenetre ouverte pour voir l'erreur
 echo.
-echo  Le serveur s'est arrete.
+echo  Serveur arrete.
 pause
 exit /b 0
 
 
-:NO_PYTHON
+:NO_PHP
 color 0C
-echo  ==========================================
-echo   [ERREUR] Python n'est pas installe.
-echo  ==========================================
+echo  [ERREUR] PHP introuvable.
 echo.
-echo  Pour faire fonctionner ce script, tu dois installer Python :
-echo.
-echo    1. Va sur https://www.python.org/downloads/
-echo    2. Clique "Download Python 3.x.x"
-echo    3. Lance l'installateur
-echo    4. *** IMPORTANT *** : coche la case "Add Python to PATH"
-echo       avant de cliquer sur "Install Now"
-echo    5. Une fois installe, relance ce start.bat
-echo.
-echo  ----------------------------------------
-echo   ALTERNATIVE : tu peux utiliser le site en ligne sans rien installer :
-echo.
-echo     https://landry-ndu.github.io/dev_web/
-echo  ----------------------------------------
+echo  Installe PHP :  winget install PHP.PHP.8.3
+echo  puis relance ce fichier.
+echo  (ou XAMPP : https://www.apachefriends.org )
 echo.
 pause
 exit /b 1
