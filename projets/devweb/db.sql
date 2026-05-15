@@ -1,9 +1,5 @@
--- ============================================================
---  GameBizarre – Schéma complet de la base de données
---  À importer sur le serveur MySQL de l'école :
---    mysql -u <user> -p < db.sql
---  ou via phpMyAdmin → onglet "Importer"
--- ============================================================
+-- Base de donnees GameBizarre
+-- Import : mysql -u <user> -p < db.sql  (ou phpMyAdmin)
 
 CREATE DATABASE IF NOT EXISTS gamebizarre
   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -157,11 +153,7 @@ CREATE TABLE IF NOT EXISTS article_comments (
     FOREIGN KEY (user_id)    REFERENCES users(id)    ON DELETE CASCADE
 );
 
--- ============================================================
---  Compte admin par défaut (mot de passe : admin123)
---  Le hash ci-dessous = password_hash('admin123', PASSWORD_DEFAULT)
---  ⚠️ Change le mot de passe après la première connexion.
--- ============================================================
+-- Compte admin par defaut (identifiant : admin / mot de passe : admin123)
 INSERT INTO users (username, email, password, role)
 VALUES (
   'admin',

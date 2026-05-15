@@ -1,165 +1,87 @@
-# 🎮 GameBizarre — version PHP + MySQL
+# GameBizarre
 
-Plateforme de critiques de jeux vidéo (type Letterboxd) + fil d'actualités
-gaming + réseau social (profils, amis, messagerie privée).
+Site web de critiques de jeux video (notes, avis, listes) avec un fil
+d'actualites gaming et des fonctions sociales (profils, amis, messagerie).
 
-**Stack** : PHP 8 (PDO) · MySQL · HTML/CSS/JavaScript vanilla · API RAWG · RSS
+Projet de Licence Informatique - PHP / MySQL / JavaScript.
 
----
+## Technologies
 
-## 🚀 Lancer le projet en local
+- PHP 8 (PDO)
+- MySQL
+- HTML / CSS / JavaScript (sans framework)
+- API RAWG (catalogue de jeux) et flux RSS (actualites)
 
-### 1. Prérequis
-- PHP 8+ (`php --version`)
-- MySQL (serveur de l'école, XAMPP, MAMP, ou MySQL local)
+## Lancer le projet
 
-### 2. Créer la base de données
-Importer le schéma `db.sql` sur le serveur MySQL :
+1. Importer la base :
 
-```bash
-mysql -u TON_USER -p < db.sql
-```
-ou via **phpMyAdmin** → onglet *Importer* → choisir `db.sql`.
+   ```
+   mysql -u root -p < db.sql
+   ```
 
-### 3. ⚙️ Connecter le serveur de l'école
+   (ou via phpMyAdmin, onglet Importer)
 
-> Le fichier `includes/database.php` n'est **pas** sur GitHub (il
-> contient des identifiants → repo public). Si tu clones le projet,
-> copie d'abord le modèle :
-> ```bash
-> cp includes/database.example.php includes/database.php
-> ```
+2. Configurer la connexion : copier `includes/database.example.php`
+   en `includes/database.php` et renseigner host / dbname / user /
+   mot de passe.
 
-Ouvre **`includes/database.php`** et modifie **uniquement** le bloc
-encadré en haut du fichier :
+3. Lancer le serveur :
 
-```php
-/* ---- CONFIG SERVEUR ÉCOLE (à modifier) ---- */
-$host   = "localhost";      // ← adresse serveur MySQL école
-$port   = 3306;             // ← port MySQL
-$dbname = "gamebizarre";    // ← nom de la base
-$user   = "root";           // ← ton login MySQL école
-$pass   = "";               // ← ton mot de passe MySQL école
-/* ------------------------------------------- */
-```
+   ```
+   php -S localhost:8000 -t public
+   ```
 
-> 💡 **Cas du proxy SSH de l'école** (fréquent en fac) :
-> ouvre d'abord un tunnel dans un terminal séparé :
-> ```bash
-> ssh -L 3306:serveur-mysql-ecole:3306 ton_login@proxy.ecole.fr
-> ```
-> puis mets dans `database.php` : `$host = "127.0.0.1";` et `$port = 3306;`
-> (laisse ce terminal ouvert tant que tu utilises le site).
+   Sous Windows, le fichier `start.bat` fait la meme chose.
 
-### 4. Lancer le serveur web
+4. Ouvrir http://localhost:8000
 
-**Le plus simple (Windows)** : double-clic sur **`start.bat`**
-→ il détecte PHP, active les extensions MySQL et ouvre le navigateur.
+L'extension PHP `pdo_mysql` doit etre activee.
 
-**Manuel (toutes plateformes)** :
-```bash
-php -S localhost:8000 -t public
-```
+## Compte de test
 
-Puis ouvre **http://localhost:8000** dans ton navigateur.
+Un compte administrateur est cree par `db.sql` :
+identifiant `admin`, mot de passe `admin123`.
 
-> ⚠️ L'extension PHP **pdo_mysql** doit être activée. XAMPP/MAMP et le
-> serveur de l'école l'ont par défaut. Le `start.bat` la force
-> automatiquement (`-d extension=pdo_mysql`). En manuel sans php.ini
-> configuré : `php -d extension=pdo_mysql -S localhost:8000 -t public`.
-
-### 5. Clé API RAWG (catalogue de jeux)
-Récupère une clé gratuite sur https://rawg.io/apidocs et mets-la dans
-`public/assets/js/config.js` :
-```js
-RAWG_KEY: 'TA_CLE_ICI',
-```
-
----
-
-## 👤 Compte admin par défaut
-
-`db.sql` crée un compte admin :
-- **identifiant** : `admin`
-- **mot de passe** : `admin123`
-
-⚠️ Le hash fourni est un exemple. Si la connexion admin échoue, crée le
-compte via l'inscription puis passe son rôle à `admin` en SQL :
-```sql
-UPDATE users SET role='admin' WHERE username='ton_pseudo';
-```
-
----
-
-## 🗂️ Architecture
+## Structure
 
 ```
 devweb/
-├── db.sql                     ← schéma complet (10 tables)
-├── README.md
-├── start.bat                  ← lance le serveur PHP (Windows)
-├── includes/
-│   ├── database.example.php   ← modèle (sur GitHub, sans mot de passe)
-│   ├── database.php           ← 🔧 CONFIG SERVEUR ÉCOLE ICI (local, gitignoré)
-│   ├── auth.php               ← session + rôles + helpers JSON
-│   └── navbar.php             ← barre de nav + modale de connexion
-└── public/                    ← racine web (php -S ... -t public)
-    ├── index.php              ← accueil
-    ├── jeux.php               ← catalogue (RAWG)
-    ├── game.php               ← fiche jeu (?slug=...)
-    ├── actualites.php         ← fil RSS + articles communautaires
-    ├── profile.php            ← profil (?user=...)  [protégé]
-    ├── messages.php           ← messagerie          [protégé]
-    ├── actions/               ← formulaires POST
-    │   ├── login_action.php
-    │   ├── register_action.php
-    │   └── logout_action.php
-    ├── api/                   ← endpoints JSON (AJAX)
-    │   ├── session.php        ← user connecté
-    │   ├── profile.php        ← profil + stats + permissions
-    │   ├── friends.php        ← demandes / liste / recherche
-    │   ├── messages.php       ← conversations / thread / envoi
-    │   ├── lists.php          ← Letterbox (joué/en cours/envie/suivi)
-    │   ├── reviews.php        ← notes + avis
-    │   └── articles.php       ← articles journalistes + likes + comments
-    └── assets/ (css, js)      ← front-end
+  db.sql                schema de la base
+  start.bat             lancement du serveur (Windows)
+  includes/
+    database.php        connexion MySQL
+    auth.php            sessions et roles
+    navbar.php          barre de navigation + connexion
+  public/               racine web
+    index.php           accueil
+    jeux.php            catalogue de jeux
+    game.php            fiche d'un jeu
+    actualites.php      fil d'actualites
+    profile.php         profil utilisateur
+    messages.php        messagerie privee
+    actions/            connexion / inscription / deconnexion
+    api/                endpoints JSON (profil, amis, messages...)
+    assets/             css et js
 ```
 
----
+## Roles
 
-## 🔐 Sécurité
+- `user` : noter, commenter, suivre des jeux, amis, messages
+- `journalist` : publier et supprimer ses articles d'actualite
+- `admin` : supprimer n'importe quel article
 
-| Mesure | Implémentation |
-|---|---|
-| Mots de passe | `password_hash()` / `password_verify()` (bcrypt) |
-| Injection SQL | Requêtes **préparées PDO** partout |
-| Sessions | `$_SESSION` PHP côté serveur |
-| Routes protégées | `requireLogin()` (pages) / `requireApiLogin()` (API → 401) |
-| Listes privées | Vérifié serveur : public OU soi-même OU ami |
-| Messages privés | L'API ne renvoie que les conversations de l'utilisateur connecté |
-| Suppression article | Réservé à l'auteur ou à un admin |
-| XSS | Échappement HTML côté affichage JS + `htmlspecialchars` PHP |
+## Securite
 
----
+- Mots de passe hashes (bcrypt, `password_hash`)
+- Requetes preparees PDO (protection contre l'injection SQL)
+- Sessions PHP, verification des droits cote serveur
+- Listes privees et messages accessibles seulement aux personnes
+  autorisees
 
-## 🎭 Rôles
+## Deploiement sur le serveur de la faculte
 
-| Rôle | Droits |
-|---|---|
-| `user` | noter, commenter, suivre, amis, messages |
-| `journalist` | + publier / supprimer ses articles d'actu |
-| `admin` | + supprimer n'importe quel article |
-
-Le rôle se choisit à l'inscription (user / journaliste). `admin` se
-définit uniquement en base.
-
----
-
-## 🧪 Tester en multi-utilisateur
-
-Contrairement à la version localStorage, ici **tout est en base MySQL** :
-deux personnes sur deux PC différents (connectés à la même base école)
-**se voient et discutent réellement**.
-
-En local, pour simuler 2 users : ouvre un onglet normal + une fenêtre
-privée, crée 2 comptes, envoie une demande d'ami, accepte, et discute.
+1. Envoyer le contenu du dossier par SFTP dans l'espace web.
+2. Importer `db.sql` via le phpMyAdmin de l'universite.
+3. Adapter `includes/database.php` (host, base, identifiants).
+4. Ouvrir l'URL de l'espace web.
